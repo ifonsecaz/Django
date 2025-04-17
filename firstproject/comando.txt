@@ -1,0 +1,14 @@
+docker build . -t my-django-app:latest && docker run -e PYTHONUNBUFFERED=1 -p  8000:8000 my-django-app 
+
+IBM cloud
+
+APP_NAME=my-django-app
+REGISTRY=us.icr.io
+docker tag ${APP_NAME}:latest ${REGISTRY}/${SN_ICR_NAMESPACE}/${APP_NAME}:latest
+docker push ${REGISTRY}/${SN_ICR_NAMESPACE}/${APP_NAME}:latest
+
+ibmcloud ce application create --name ${APP_NAME} --image ${REGISTRY}/${SN_ICR_NAMESPACE}/${APP_NAME}:latest --registry-secret icr-secret --port 8000
+
+ibmcloud ce app logs --application ${APP_NAME}
+
+ibmcloud ce app events --application ${APP_NAME}
